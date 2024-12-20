@@ -8,7 +8,6 @@ variables:
   resourceGroupName: '8CLD_201'
   location: 'eastus'
   storageAccountName: '0001storageaccount0001'
-  storageContainerName: 'mycontainer'  # Ajoutez le nom du conteneur de stockage
 
 stages:
 - stage: Infrastructure
@@ -38,8 +37,3 @@ stages:
             --resource-group $(resourceGroupName) \
             --location $(location) \
             --sku Standard_LRS
-
-          echo "Création du container"
-          az storage container create \
-            --name $(storageContainerName) \
-            --account-name $(storageAccountName)
