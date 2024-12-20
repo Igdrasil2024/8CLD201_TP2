@@ -2,27 +2,39 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: Newpool
 
 variables:
-  azureSubscription: '<Azure_subscription_1>'
-  resourceGroup: '8CLD201_TP2'
+  resourceGroupName: '8CLD_201'
   location: 'eastus'
   storageAccountName: '0001storageaccount0001'
 
-steps:
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: $(azureSubscription)
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript: |
-      # Créer le groupe de ressources
-      az group create --name $(resourceGroup) --location $(location)
+stages:
+- stage: Infrastructure
+  displayName: Déploiement de l'infrastructure
+  jobs:
+  - job: DeployInfrastructure
+    displayName: Déploiement des ressources Azure
+    steps:
+    - task: AzureCLI@2
+      displayName: Déployer le groupe de ressources et le Storage Account
+      inputs:
+        azureSubscription: '<Azure-Service-Connection>'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          echo "Création du groupe de ressources"
+          az group create --name $(resourceGroupName) --location $(location)
 
-      # Déployer le Storage Account
-      az storage account create \
-        --name $(storageAccountName) \
-        --resource-group $(resourceGroup) \
-        --location $(location) \
-        --sku Standard_LRS
+          echo "Création du Storage Account"
+          az storage account create \
+            --name $(storageAccountName) \
+            --resource-group $(resourceGroupName) \
+            --location $(location) \
+            --sku Standard_LRS
+
+          echo "Création du container"
+          az storage container create \
+            --name $(storageContainerName) \
+            --account-name $(storageAccountName)
+
