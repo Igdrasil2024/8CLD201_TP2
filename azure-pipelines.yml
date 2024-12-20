@@ -28,12 +28,12 @@ stages:
         scriptType: pscore  # Utiliser PowerShell Core (pscore) au lieu de bash
         scriptLocation: inlineScript
         inlineScript: |
-          echo "Création du groupe de ressources"
-          az group create --name $(resourceGroupName) --location $(location)
+          Write-Host "Création du groupe de ressources"
+          az group create --name $Env:resourceGroupName --location $Env:location
 
-          echo "Création du Storage Account"
-          az storage account create \
-            --name $(storageAccountName) \
-            --resource-group $(resourceGroupName) \
-            --location $(location) \
+          Write-Host "Création du Storage Account"
+          az storage account create `
+            --name $Env:storageAccountName `
+            --resource-group $Env:resourceGroupName `
+            --location $Env:location `
             --sku Standard_LRS
