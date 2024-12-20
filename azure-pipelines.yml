@@ -8,7 +8,7 @@ variables:
   resourceGroupName: '8CLD_201'
   location: 'eastus'
   storageAccountName: '0001storageaccount0001'
-  storageContainerName: 'mycontainer'  # Add the missing variable for the container name
+  storageContainerName: 'mycontainer'  # Ajoutez le nom du conteneur de stockage
 
 stages:
 - stage: Infrastructure
@@ -19,15 +19,14 @@ stages:
     steps:
     - script: |
         az --version
-        bash --version
         pwsh --version
-      displayName: 'Check CLI and Shell Versions'
+      displayName: 'Vérifier les versions de CLI et Shell'
 
     - task: AzureCLI@2
       displayName: Déployer le groupe de ressources et le Storage Account
       inputs:
-        azureSubscription: '01'  # Make sure the service connection is correct
-        scriptType: bash
+        azureSubscription: '01'  # Vérifiez que la connexion Azure est correcte
+        scriptType: pscore  # Utiliser PowerShell Core (pscore) au lieu de bash
         scriptLocation: inlineScript
         inlineScript: |
           echo "Création du groupe de ressources"
