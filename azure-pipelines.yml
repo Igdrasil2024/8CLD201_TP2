@@ -8,6 +8,7 @@ variables:
   resourceGroupName: '8CLD_201'
   location: 'eastus'
   storageAccountName: '0001storageaccount0001'
+  storageContainerName: 'mycontainer'  # Add the missing variable for the container name
 
 stages:
 - stage: Infrastructure
@@ -16,10 +17,16 @@ stages:
   - job: DeployInfrastructure
     displayName: Déploiement des ressources Azure
     steps:
+    - script: |
+        az --version
+        bash --version
+        pwsh --version
+      displayName: 'Check CLI and Shell Versions'
+
     - task: AzureCLI@2
       displayName: Déployer le groupe de ressources et le Storage Account
       inputs:
-        azureSubscription: '01'
+        azureSubscription: '01'  # Make sure the service connection is correct
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
@@ -37,4 +44,3 @@ stages:
           az storage container create \
             --name $(storageContainerName) \
             --account-name $(storageAccountName)
-
