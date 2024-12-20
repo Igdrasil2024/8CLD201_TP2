@@ -1,19 +1,28 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
+
+variables:
+  azureSubscription: '<Azure_subscription_1>'
+  resourceGroup: '8CLD201_TP2'
+  location: 'eastus'
+  storageAccountName: '0001storageaccount0001'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureSubscription)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      # Créer le groupe de ressources
+      az group create --name $(resourceGroup) --location $(location)
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+      # Déployer le Storage Account
+      az storage account create \
+        --name $(storageAccountName) \
+        --resource-group $(resourceGroup) \
+        --location $(location) \
+        --sku Standard_LRS
