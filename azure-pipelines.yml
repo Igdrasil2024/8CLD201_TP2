@@ -19,7 +19,7 @@ stages:
     - task: AzureCLI@2
       displayName: Déployer le groupe de ressources et le Storage Account
       inputs:
-        azureSubscription: '<Azure-Service-Connection>'
+        azureSubscription: 'Azure_subscription_1'
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
